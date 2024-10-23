@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://8c7py5saqtja"]
+
+[ext_resource type="Material" uid="uid://dl5e4dywhg8g4" path="res://Materials/RightRedBox.tres" id="1_itmpy"]
+[ext_resource type="Script" path="res://Scripts/CubeMovement.gd" id="1_qdwia"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pbiqf"]
+size = Vector3(0.25, 0.25, 0.25)
+
+[node name="Cube" type="CSGBox3D"]
+material_override = ExtResource("1_itmpy")
+use_collision = true
+collision_layer = 512
+collision_mask = 512
+size = Vector3(0.25, 0.25, 0.25)
+script = ExtResource("1_qdwia")
+
+[node name="CubeArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CubeArea"]
+shape = SubResource("BoxShape3D_pbiqf")

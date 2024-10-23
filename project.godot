@@ -13,6 +13,11 @@ config_version=5
 config/name="Beatsaber"
 run/main_scene="res://Scenes/assignment2.tscn"
 config/features=PackedStringArray("4.3")
+config/icon="res://Godot_icon.png"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/road-generator/plugin.cfg")
 
 [rendering]
 

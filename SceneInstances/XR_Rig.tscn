@@ -1,0 +1,69 @@
+[gd_scene load_steps=11 format=3 uid="uid://fox32mb3yvk0"]
+
+[ext_resource type="Script" path="res://Scripts/XRSetup.gd" id="1_2slvy"]
+[ext_resource type="Material" uid="uid://dsklb6ajyysoe" path="res://Materials/BlueLaser.tres" id="3_7ossg"]
+[ext_resource type="PackedScene" uid="uid://cnwp7ndjr4s8y" path="res://Models/Quest2Controllers/OculusQuest2TouchController_Left.gltf" id="3_iftre"]
+[ext_resource type="Script" path="res://Scripts/PointingInteraction.gd" id="3_vrbm1"]
+[ext_resource type="Script" path="res://Scripts/LineRenderer.gd" id="4_8jfjj"]
+[ext_resource type="Material" uid="uid://dhf1bw32lbxqw" path="res://Materials/RedLaser.tres" id="5_1t6y3"]
+[ext_resource type="PackedScene" uid="uid://bc8lh0rihgxvi" path="res://Models/Quest2Controllers/OculusQuest2TouchController_Right.gltf" id="5_qa6ej"]
+[ext_resource type="AudioStream" uid="uid://dq51exdcqf2m4" path="res://Audio/boing.wav" id="8_choa8"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_gy7jy"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_5p3xo"]
+
+[node name="XROrigin_Rig" type="XROrigin3D"]
+script = ExtResource("1_2slvy")
+
+[node name="XRCamera3D" type="XRCamera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 30)
+far = 100.0
+
+[node name="LeftController" type="XRController3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"left_hand"
+script = ExtResource("3_vrbm1")
+
+[node name="LineRenderer" type="MeshInstance3D" parent="LeftController"]
+layers = 257
+material_override = ExtResource("3_7ossg")
+mesh = SubResource("ImmediateMesh_gy7jy")
+script = ExtResource("4_8jfjj")
+
+[node name="OculusQuest2TouchController_Left" parent="LeftController" instance=ExtResource("3_iftre")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="LeftController"]
+collision_mask = 257
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="Boing" type="AudioStreamPlayer" parent="LeftController"]
+stream = ExtResource("8_choa8")
+
+[node name="RightController" type="XRController3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"right_hand"
+script = ExtResource("3_vrbm1")
+
+[node name="LineRenderer" type="MeshInstance3D" parent="RightController"]
+layers = 513
+material_override = ExtResource("5_1t6y3")
+cast_shadow = 0
+mesh = SubResource("ImmediateMesh_5p3xo")
+script = ExtResource("4_8jfjj")
+
+[node name="RayCast3D" type="RayCast3D" parent="RightController"]
+collision_mask = 513
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="OculusQuest2TouchController_Right" parent="RightController" instance=ExtResource("5_qa6ej")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="Boing" type="AudioStreamPlayer" parent="RightController"]
+stream = ExtResource("8_choa8")
+
+[connection signal="button_pressed" from="LeftController" to="LeftController" method="_on_button_pressed"]
+[connection signal="button_pressed" from="RightController" to="RightController" method="_on_button_pressed"]

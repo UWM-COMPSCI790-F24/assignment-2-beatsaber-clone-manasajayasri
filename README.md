@@ -13,7 +13,7 @@ Name: Manasa Jayasri Thambabathula
 
 UWM Email: thambab2@uwm.edu
 
-Third Party Assets:
+Third Party Assets: None.
 
 ## Getting Started
 

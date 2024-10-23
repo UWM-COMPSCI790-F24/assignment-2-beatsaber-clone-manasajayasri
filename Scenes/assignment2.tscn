@@ -1,25 +1,45 @@
-[gd_scene load_steps=3 format=3 uid="uid://dvhfsxby7n303"]
+[gd_scene load_steps=9 format=3 uid="uid://dvhfsxby7n303"]
 
-[ext_resource type="Script" path="res://Scenes/left_xr_controller_3d.gd" id="1_hbepq"]
+[ext_resource type="PackedScene" uid="uid://fox32mb3yvk0" path="res://SceneInstances/XR_Rig.tscn" id="1_q8uuy"]
+[ext_resource type="Material" uid="uid://3blngb730bq1" path="res://Materials/Ground.tres" id="2_gbxdx"]
+[ext_resource type="Script" path="res://Scripts/CubeSpawner.gd" id="2_lsand"]
+[ext_resource type="PackedScene" uid="uid://8c7py5saqtja" path="res://SceneInstances/cube.tscn" id="3_k1t4u"]
+[ext_resource type="PackedScene" uid="uid://phvqlcbo58bt" path="res://SceneInstances/second_cube.tscn" id="5_x18sf"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_kv7i0"]
+[sub_resource type="Environment" id="Environment_7p72s"]
+background_mode = 1
+background_color = Color(0.432658, 0.619185, 0.994411, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0, 0, 0.588235, 1)
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_ui10h"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hhn8j"]
+size = Vector3(8, 0.1, 120)
 
 [node name="Node3D" type="Node3D"]
 
-[node name="XROrigin3D" type="XROrigin3D" parent="."]
+[node name="XROrigin_Rig" parent="." instance=ExtResource("1_q8uuy")]
 
-[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7p72s")
+camera_attributes = SubResource("CameraAttributesPractical_ui10h")
+script = ExtResource("2_lsand")
 
-[node name="Left_XRController3D" type="XRController3D" parent="XROrigin3D"]
-tracker = &"left_hand"
-script = ExtResource("1_hbepq")
+[node name="StaticBody3D" type="StaticBody3D" parent="WorldEnvironment"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/Left_XRController3D"]
-transform = Transform3D(0.05, 0, 0, 0, -4.37114e-08, 0.05, 0, -1, -2.18557e-09, 0, 0, 0)
-mesh = SubResource("CylinderMesh_kv7i0")
+[node name="CSGBox3D" type="CSGBox3D" parent="WorldEnvironment/StaticBody3D"]
+material_override = ExtResource("2_gbxdx")
+size = Vector3(8, 0.1, 120)
 
-[node name="Right_XRController3D" type="XRController3D" parent="XROrigin3D"]
-tracker = &"right_hand"
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldEnvironment/StaticBody3D"]
+shape = SubResource("BoxShape3D_hhn8j")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/Right_XRController3D"]
-transform = Transform3D(0.05, 0, 0, 0, -4.37114e-08, 0.05, 0, -1, -2.18557e-09, 0, 0, 0)
+[node name="Cube" parent="WorldEnvironment" instance=ExtResource("3_k1t4u")]
+
+[node name="SecondCube" parent="WorldEnvironment" instance=ExtResource("5_x18sf")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.766044, 0.642788, 0, -0.642788, 0.766044, 0, 0, -60)
+light_energy = 3.0
+shadow_enabled = true
